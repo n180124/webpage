@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>form validation</title>
+        <style>
+            div{
+                width:500px;
+            }
+            img{
+                width:20px;
+                height:20px;
+                border-radius: 50px;
+            } 
+            #al{
+                color:red;
+                visibility:hidden;
+            }
+            .bg-img {
+  width: 100%;
+  padding: 10% 0;
+  background-size: cover;
+  background-position: center;
+ background-image: url('img5.jpg'); 
+  border: 1px solid white;
+}
+#para{
+    visibility: hidden;
+}
+#indno,#usano{
+    visibility: hidden;
+}
+#lists{
+    list-style-type: none;
+}
+.delete{
+			background-color: blue;
+}
+button:hover{
+			background-color: red;
+}
+#add:hover{
+  background-color: green;
+}
+ul li{
+    margin-bottom: 5px;
+}
+.delete{
+    margin-left:5px;
+}
+#inmail{
+    color:red;
+    visibility: hidden;
+}
+        </style>
+       
+        
+    </head>
+    <body>
+        <center>
+            <h1>Registration Form</h1>
+        <div>
+            <form class="bg-img"  action="/js.php" method="post" id="form" onsubmit="return ((validate()) && (sumitconfirm()))">
+            <table>
+                <tr><td>FIRST NAME</td><td><input type="text" id="first"><label  id="i1" style="color:red; visibility:hidden;">invalid data</label></td></tr>
+             <tr><td>MIDDLE NAME</td><td><input type="text" id="middle"><label id="i2" style="color:red; visibility:hidden;">invalid data</label></td></tr>
+                <tr><td >LAST NAME</td><td><input type="text" id="last"onchange="fulln();"></td></tr>
+                <tr><td>FULL NAME</td><td><p id="para"style="border:solid 2px grey;" ></p></td></tr>
+                <tr><td><label>COUNTRY</label></td><td><select><option id="op1">INDIA</option><option id="op2">USA</option></select></td></tr>
+                <tr><td>PH.NO:</td><td><input type="text" id="no" onchange="numselect();"><label  style="color:red;visibility:hidden;"id="numalert">invalid no</label></td></tr>
+                <tr><td>PASSWORD</td><td><input type="password" id="pword"  onchange="pwdcheck();"><img src="eye.jpg" id="image" onmouseover="see()" onmouseout="hide()"><label  style="color:red;visibility:hidden;"id="passalert">invalid password</label></td></tr>
+                <tr><td>HOBBIES</td>
+                    <div>
+                        <form id="addhobby">
+                            <td><input type="text" name="" id="hobby">
+                            <input type="button" name="" value="ADD" id="add">
+                        </form>
+                    </div></td></tr>
+                <tr><td></td><td>
+                        The Hobbies are:
+                        <ul id="lists">
+                              <li>Cricket<button class="delete">X</button></li>
+                          </ul>
+                </td></tr>
+                <tr><td>PHOTO</td><td><input onchange="upload_check();" type="file" id="upimage" accept="image/*"><label id="al">more than 50kb</label></td></tr> 
+                <tr><td>EMAIL</td><td><input type="text" id="mcheck" onblur="mailcheck();"><label id="inmail">invalid mail id</label></td></tr>
+                <tr><td>DOB:</td><td><input type="date" id="DOB" onblur="ageCalculator();"><span id = "message" style="color:red"> </span></td></tr>
+                <tr><td>AGE</td><td><span id="agecal" style="border:2px solid grey;"></span></td></tr>
+                <tr><td>ADDRESS</td><td><textarea id="ads"onchange="remdig();"></textarea><p id="nodig"></p></td></tr>
+                <tr><td><input type="checkbox" onclick="agreeing();" onchange="details();" id="chbox"></td><td>I agree with your terms and conditions</td></tr>
+                <tr><td></td><td><input type="reset" name="r" value="RESET"><input type="submit" id="sub" name="s" value="SUBMIT" disabled></td></tr>
+            </table>
+        </form>
+        </div>
+        <p id="info"></p>
+    </center>
+          <script type="text/javascript">
+            function validate(){
+                var reg=/^[a-z A-Z]{3}[a-z A-Z]*/;
+                var fn=document.getElementById("first").value;
+                var ln=document.getElementById("last").value;
+                if(!(reg.test(fn)) || fn.trim()=="")
+                {
+                    document.getElementById("first").style.border="2px solid red";
+                    document.getElementById("i1").style.visibility="visible";
+                    return false;
+                }
+                else if(!(reg.test(ln)))
+                {
+                    document.getElementById("middle").style.border="2px solid red";
+                    document.getElementById("i2").style.visibility="visible";
+                    return false;
+                }
+                else
+                {
+                   return true;
+                }
+            }
+        
+            function see()
+            {
+            document.getElementById("pword").type="text";
+            } 
+            function hide()
+            {
+                document.getElementById("pword").type="password";
+            }
+            function numselect()
+            {
+                reg1=/^[6-9]\d{9}$/;
+                reg2=/^[6-9]\d{2}-\d{3}-\d{4}$/;
+                var numb=document.getElementById("no").value;
+                if(document.getElementById("op1").selected)
+                {
+                    if(!reg1.test(numb))
+                    {
+                      document.getElementById("numalert").style.visibility="visible";
+                    }
+                }
+                if(document.getElementById("op2").selected)
+                {
+                    if(!reg2.test(numb))
+                    {
+                      document.getElementById("numalert").style.visibility="visible";
+                    }
+                }
+
+            }
+            function fulln()
+            {
+                var f1=document.getElementById("first").value;
+                var l1=document.getElementById("last").value;
+                var f=f1+" "+l1;
+                document.getElementById("para").innerHTML=f;
+                document.getElementById("para").style.visibility="visible";
+                
+            }
+            function pwdcheck(){
+                var r1=/[a-z]/;
+                var r2=/[A-Z]/;
+                var r3=/[0-9]/;
+                var r4=/[.*$%)(-@&^]/;
+                var pd=document.getElementById("pword").value;
+                if(!(r1.test(pd) && r2.test(pd) && r3.test(pd) && r4.test(pd) && pd.length>5))
+                {
+                    document.getElementById("passalert").style.visibility="visible";
+                }
+            }
+        function upload_check()
+        {
+            var upl=document.getElementById("upimage");
+            if(upl.files[0].size > 51200)
+            {
+               document.getElementById("al").style.visibility="visible";
+            }
+        }
+        function reconfirm()
+        {
+            if(confirm("Do you want to reset?"))
+            return true;
+            else
+            return false;
+        }
+        function mailcheck(){
+            var mailreg=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.)\w{2,3}$/;
+            var m1=document.getElementById("mcheck").value;
+            if(!(mailreg.test(m1)))
+            {
+              document.getElementById("inmail").style.visibility="visible";
+            }  
+        }
+        function remdig(){
+            var ad=document.getElementById("ads").value;
+            var noNumbers = ad.replace(/\d/g, '');
+            console.log(noNumbers);
+            document.getElementById('nodig').innerHTML=noNumbers;
+        }
+        function agreeing(){
+            var ch=document.getElementById('chbox').checked;
+            if(ch)
+            {
+                document.getElementById('sub').disabled=false;
+            }
+            else{
+                document.getElementById('sub').disabled=true;
+            }
+        }
+        function sumitconfirm(){
+            if(confirm("are sure to submit"))
+            {
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+</script>
+<script>
+    var rs=document.getElementById('form');
+    rs.addEventListener('submit',validate);
+    rs.addEventListener('submit',sumitconfirm);
+</script>
+<script>  
+    function ageCalculator() {  
+        var userinput = document.getElementById("DOB").value;  
+        var dob = new Date(userinput);  
+        if(userinput==null || userinput=='') {  
+          document.getElementById("message").innerHTML = "**Choose a date please!";    
+          return false;   
+        } else {  
+          
+        //calculate month difference from current date in time  
+        var month_diff = Date.now() - dob.getTime();  
+          
+        //convert the calculated difference in date format  
+        var age_dt = new Date(month_diff);   
+          
+        //extract year from date      
+        var year = age_dt.getUTCFullYear();  
+          
+        //now calculate the age of the user  
+        var age = Math.abs(year - 1970);  
+          
+        //display the calculated age  
+        return document.getElementById("agecal").innerHTML =    age + " years. ";  
+        }  
+    }  
+    </script>  
+<script>
+  var images = new Array(
+  'img1.jpg',
+  'img2.jpg',
+  'img3.jpg',
+  'img4.jpg',
+);
+
+var slider = setInterval(function() {
+  document.getElementsByClassName('bg-img')[0].setAttribute('style', 'background-image: url("'+images[0]+'")');
+  images.splice(images.length, 0, images[0]);
+  images.splice(0, 1);
+}, 3000);   
+</script>
+ <script>
+    var myform=document.getElementById("add");
+myform.addEventListener('click',addItem,false);
+var lists=document.getElementById("lists");
+lists.addEventListener('click',removeItem,false);
+function addItem(e)
+{
+  e.preventDefault();
+  var f=document.getElementById("hobby").value;
+  var l=document.createElement("li");
+  var text=document.createTextNode(f);
+  l.appendChild(text);
+  var dbtn=document.createElement("button");
+  dbtn.setAttribute("class","delete");
+  var dtext=document.createTextNode("X");
+  dbtn.appendChild(dtext);
+  l.appendChild(dbtn);
+  lists.appendChild(l);
+}
+function removeItem(e)
+{
+  if(e.target.classList.contains('delete'))
+  {
+    if(confirm("Are you sure you want to delete?"))
+    {
+      var li=e.target.parentElement;
+      lists.removeChild(li);
+    }
+  }
+}
+ </script>  
+ <script>
+    function details()
+    {
+        document.getElementById("info").innerHTML="Name: "+ document.getElementById("first").value ;
+
+    }
+ </script> 
+    </body>
+</html>
